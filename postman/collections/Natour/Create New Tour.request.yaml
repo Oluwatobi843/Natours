@@ -1,0 +1,9 @@
+$kind: http-request
+name: Create New Tour
+description: ""
+url: http://localhost:3000/api/v1/tours
+method: POST
+body:
+  type: json
+  content: ""
+order: 3866970816144334
