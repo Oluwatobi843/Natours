@@ -16,13 +16,38 @@ app.use(express.json())
 //      res.send ('you can post to this endpoint');
 // })
 
-const tours = fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`, 'utf-8'))
 
 app.get('/api/v1/tours', (req, res) => {
     res.status(200).json({
         status: 'success',
         data: {
             tours: tours 
+        }
+    })
+})
+
+
+app.get('/api/v1/tours/:id', (req, res) => {
+    
+    console.log(req.params )
+
+    const id = req.params.id * 1;
+       const tour = tours.find(el => el.id === id);
+
+    // if(id > tours.length){
+    if(!tour){
+        return res.status(404).json({
+             status: 'fail',
+             message: 'Invalid ID'
+        })
+    }
+
+ 
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour: tour 
         }
     })
 })
@@ -43,7 +68,7 @@ app.post('/api/v1/tours', (req, res) => {
         })
     } )
 
-     res.send('Done');
+     
 })
 
 const port = 3000
