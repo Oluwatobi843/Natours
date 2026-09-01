@@ -1,24 +1,31 @@
 const express = require('express');
 const fs = require('fs');
+const morgan =  require('morgan');
 
 
 const app =  express();
 
+// 1) Middlewares
+app.use(morgan('dev'));
 
 app.use(express.json())
 
-// app.get('/' , (req, res ) => {
-//     res.status(200).json({ message: 'Hello from the server side!', app: 'Natour'});
-// });
+app.use((req, res, next) => {
+    console.log('Hello from the middleware 👌');
+    next();
+})
 
-
-// app.post('/', (req, res) => {
-//      res.send ('you can post to this endpoint');
-// })
+app.use((req, res, next) => {
+    req.requestTime = new Date().toISOString();
+    next();
+})
 
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`, 'utf-8'))
 
+
+// 2.) Routes Handlers
 const getAllTours = (req, res) => {
+    console.log(req.requestTime)
     res.status(200).json({
         status: 'success',
         data: {
@@ -101,6 +108,8 @@ const deleteTour  =  (req, res) => {
     });
 }
 
+
+// 3.) Routes
 
 // app.get('/api/v1/tours', getAllTours )
 // app.get('/api/v1/tours/:id', getTour)
