@@ -27,5 +27,8 @@
     "eslint-plugin-react": "^7.37.5",
     "nodemon": "^3.1.14",
     "prettier": "^3.9.6"
+  },
+  "engine": {
+    "node": ">=10.0.0"
   }
 }
