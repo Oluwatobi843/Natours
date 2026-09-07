@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const tourSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'A tour must have a name']
     },
+    slug: String,
 
     duration: {
         type: Number,
@@ -64,7 +66,51 @@ const tourSchema = new mongoose.Schema({
         select: false
     }, 
 
-    startDates: [Date]
+    startDates: [Date],
+
+    secretTour: {
+        type: Boolean,
+        default: false    
+    },
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+})
+
+tourSchema.virtual('durationWeeks').get(function(){
+    return this.duration / 7
+})
+
+// DOCUMENTS MIDDLEWARE: run before the .save() amd .create()
+tourSchema.pre('save', function(next){
+    this.slug = slugify(this.name, {lower: true})
+    next();
+});
+
+// tourSchema.pre('save', function(next){
+//     console.log('will save document...')
+//     next()
+// })
+
+// tourSchema.post('save', function(doc, next){
+//     console.log(doc)
+//     next();
+// })
+
+// QUERY MIDDLEWARE
+// tourSchema.pre('find', function(next){
+
+
+tourSchema.pre(/^find/, function(next){ 
+    this.find({ secretTour: { $ne: true }})
+
+    this.start = Date.now()
+    next();
+})                  
+tourSchema.pre(/^find/, function(doc, next){
+    console.log(`Query took ${Date.now() - this.start} milliseconds! `)
+    console.log(docs);
+    next(); 
 })
 
 const Tour = mongoose.model('Tour', tourSchema);
