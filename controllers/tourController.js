@@ -1,5 +1,12 @@
 const express = require('express');
-const Tour = require('./../models/tourModel')
+const Tour = require('./../models/tourModel');
+
+exports.aliasTopTours = (req, res, next) => {
+    req.query.limit = '5';
+    req.query.sort = '-ratingsAverage,price';
+    req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+    next();
+} 
 
 // const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`, 'utf-8'))
 
@@ -15,7 +22,7 @@ exports.getAllTours = async (req, res) => {
         const excludedFields = ['page', 'sort', 'limit', 'fields'];
         excludedFields.forEach(el => delete queryObj[el])
 
-        
+         
         // 2.) Advance Filtering
         let queryStr = JSON.stringify(queryObj);
         queryStr =   queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
