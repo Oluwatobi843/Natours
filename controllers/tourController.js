@@ -105,7 +105,7 @@ exports.updateTour = async (req, res) => {
     })   
     }
 } 
-
+  
 exports.deleteTour  =  async (req, res) => {
    try{
 
