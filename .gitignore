@@ -1,4 +1,4 @@
-node_module
-public
-.postman
+node_modules/
+public/
+.postman/
 config.env
