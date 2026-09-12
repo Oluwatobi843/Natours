@@ -122,12 +122,11 @@ tourSchema.pre('save', function(next){
 
 
 tourSchema.pre(/^find/, function(next){ 
-    this.find({ secretTour: { $ne: true }})
-
+    this.find({ secretTour: { $ne: true }});
     this.start = Date.now()
     next();
 })                  
-tourSchema.pre(/^find/, function(doc, next){
+tourSchema.post(/^find/, function(doc, next){
     console.log(`Query took ${Date.now() - this.start} milliseconds! `)
     // console.log(docs);
     next(); 
