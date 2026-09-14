@@ -1,3 +1,29 @@
+const sendErrorDev = (err, res) => {
+        res.status(err.statusCode).json({
+        status: err.status,
+        error: err,
+        message: err.message,
+        stack: err.stack
+    });
+}
+
+const sendErrorProd = (err,res) => {
+    // Operational, trusted error: send message to client
+   if(err.isOperational){
+          res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message
+    });
+
+    // Programming or other unknow error
+   } else {
+        res.status(500).json({
+            status: 'error',
+            message: 'Something went very wrong'
+        })
+   }
+}
+
 module.exports = ((err, req, res, next) => {
     // console.log(err.stack);
 
@@ -6,17 +32,10 @@ module.exports = ((err, req, res, next) => {
 
     if(process.env.NODE_ENV === 'development'){
 
-        res.status(err.statusCode).json({
-        status: err.status,
-        error: err,
-        message: err.message,
-        stack: err.stack
-    });
+        sendErrorDev(err, res)
+    
     }else if(process.env.NODE_ENV === 'production'){
-        res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message
-    });
+       sendErrorProd(err, res)
     }
 
   
