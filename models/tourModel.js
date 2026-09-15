@@ -10,7 +10,7 @@ const tourSchema = new mongoose.Schema({
         trim: true,
         maxlength: [40, 'A tour name must have less or equal than 40 characters'],
         minlength:   [10, 'A tour name must have more or equal than 10 characters'],
-        // validate: [validator.isAlpha, 'Tour name must only contain characters']     
+        // validate: [validator.isAlpha, 'Tour name must only contain characters']       
     },
     slug: String,
 
@@ -82,7 +82,7 @@ const tourSchema = new mongoose.Schema({
     images: [String],
     createAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
         select: false
     }, 
 
@@ -122,12 +122,11 @@ tourSchema.pre('save', function(next){
 
 
 tourSchema.pre(/^find/, function(next){ 
-    this.find({ secretTour: { $ne: true }})
-
+    this.find({ secretTour: { $ne: true }});
     this.start = Date.now()
     next();
 })                  
-tourSchema.pre(/^find/, function(doc, next){
+tourSchema.post(/^find/, function(doc, next){
     console.log(`Query took ${Date.now() - this.start} milliseconds! `)
     // console.log(docs);
     next(); 
