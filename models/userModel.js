@@ -1,4 +1,4 @@
-const mongoose = require('mongose');
+const mongoose = require('mongoose');
 const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
@@ -28,10 +28,16 @@ const userSchema = new mongoose.Schema({
     passwordConfirm: {
         type: String,
         required: [true, 'Please provide a password'],
-        minlength: 8 
+        validate: {
+            // This only work on CREATE and SAVE!!!
+            validator: function(el){
+                return el === this.password; // abc === abc
+            },
+            message: 'Password are not the same!'
+        }
     },
-}) ;
+}) ;      
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;   
+module.exports = User;      
