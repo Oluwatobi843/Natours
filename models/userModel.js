@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please tell us your name'],
         // validate: [validator.isAlpha, 'Tour name must only contain characters']       
     },
-
     email: {
         type: String,
         required: [true, 'Please provide your email'],
@@ -16,7 +15,6 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         validate: [validator.isEmail, 'Please provide a valid email']
     },
-
     photo: {
         type: String,
        
