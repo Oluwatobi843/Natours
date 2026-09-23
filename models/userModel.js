@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
                 return el === this.password; // abc === abc
             },
             message: 'Password are not the same!'
-        }
+        }    
     },
 }) ;    
 
