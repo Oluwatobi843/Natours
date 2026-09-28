@@ -9,7 +9,6 @@ const signToken = id => {
         expiresIn: process.env.JWT_EXPIRES_IN
     })
 }
-
 exports.signup = catchAsync( async(req, res, next ) => {
     // const newUser = await User.create(req.body);
     const newUser = await User.create({
@@ -20,9 +19,6 @@ exports.signup = catchAsync( async(req, res, next ) => {
     });
 
     const token = signToken(newUser._id);
-
-
-    
     res.status(201).json({
         status: 'success',          
         token,
@@ -46,8 +42,6 @@ exports.login = catchAsync( async (req, res, next) => {
     if(!user || !(await user.correctPassword(password, user.password))){
         return next(new AppError('Incorrect email or password', 401))
     }
-   
-
     // 3) If everything is ok, send token to client 
     const token = signToken(user._id);
     res.status(200).json({
@@ -62,9 +56,6 @@ exports.protect = catchAsync(async (req, res, next) => {
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
             token = req.headers.authorization.split('')[1];
         }
-
-        
-
         if(!token){
             return next(new AppError('You are not logged in! Please log in to get access.', 401))
         }
