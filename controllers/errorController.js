@@ -44,7 +44,7 @@ const sendErrorProd = (err, res) => {
 
         res.status(err.statusCode).json({
             status: err.status,
-            message: err.message
+            message: err.message   
         });
 
     // Programming or other unknown error
@@ -80,7 +80,7 @@ module.exports = (err, req, res, next) => {
 
         if(error.name === 'validationError') error = handleValidationErrorDB(error);
 
-        if(error.name === 'JsonWebTokenError') error = handleJWTError();
+        if(error.name === 'JsonWebTokenError') error = handleJWTError( );
 
         if(error.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
